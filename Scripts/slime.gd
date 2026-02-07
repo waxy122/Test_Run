@@ -28,6 +28,7 @@ var is_dead := false
 @onready var right: RayCast2D = $Right
 @onready var timer: Timer = $Timer
 @onready var anim: AnimatedSprite2D = $AnimatedSprite2D
+@onready var health_bar: ProgressBar = $health_bar
 
 # READY
 func _ready() -> void:
@@ -38,6 +39,7 @@ func _ready() -> void:
 
 # PHYSICS
 func _physics_process(delta: float) -> void:
+	health_bar.value = health
 	if is_dead:
 		velocity = Vector2.ZERO
 		return

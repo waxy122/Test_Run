@@ -11,7 +11,8 @@ var kunai_maxammo : int = 10
 var kunai_ammo: int = 10
 var shuriken_maxammo : int = 5
 var shuriken_ammo: int = 5
-
+var max_stamina: int = 100
+var stamina: int = 100
 
 
 var last_direction: Vector2 = Vector2.RIGHT
@@ -35,6 +36,7 @@ var is_hit := false
 @onready var cd: Timer = $CD
 @onready var kunai_amm: LineEdit = $CanvasLayer/kunai/kunai_amm
 @onready var shuriken_amm: LineEdit = $CanvasLayer/shuriken/shuriken_amm
+@onready var health_bar: ProgressBar = $CanvasLayer/health_barddddd
 
 
 func _ready() -> void:
@@ -43,6 +45,7 @@ func _ready() -> void:
 
 
 func _physics_process(delta: float) -> void:
+	health_bar.value = health
 	if is_dead:
 		velocity = Vector2.ZERO
 		return
@@ -63,6 +66,17 @@ func _physics_process(delta: float) -> void:
 	if Input.is_action_just_pressed("attack") and not is_attacking:
 		attack()
 
+	if Input.is_action_pressed("Sprint") and stamina > 0:
+		SPEED = 500
+		stamina -= 25 * delta
+		$CanvasLayer/regen_timer.stop()
+	else:
+		SPEED = 300
+		if stamina < max_stamina and $CanvasLayer/regen_timer.is_stopped():
+			$CanvasLayer/regen_timer.start()
+
+	stamina = clamp(stamina, 0, max_stamina)
+
 	if Input.is_action_just_pressed("change_throw"):
 		if eqp == 1:
 			eqp = 2
@@ -74,20 +88,27 @@ func _physics_process(delta: float) -> void:
 			$CanvasLayer/shuriken.visible = false
 
 	if Input.is_action_just_pressed("Throwable") and not is_attacking and can_throw:
-		can_throw = false
-		cd.start()
+		var thrown := false
 		if eqp == 1 and kunai_ammo > 0:
 			throw_kunai()
 			kunai_ammo -= 1
+			thrown = true
 		elif eqp == 2 and shuriken_ammo > 0:
 			throw_shruiken()
 			shuriken_ammo -= 1
+			thrown = true
+
+		if thrown:
+			can_throw = false
+			cd.start()
 	
 	kunai_amm.text = str(kunai_ammo)
 	shuriken_amm.text = str(shuriken_ammo)
 	
 	if can_move:
 		process_movement()
+	else:
+		velocity = Vector2.ZERO
 	_process_animation()
 	move_and_slide()
 
@@ -209,3 +230,14 @@ func die():
 
 func _on_cd_timeout() -> void:
 	can_throw = true
+
+func regen():
+	stamina += 15 
+	$CanvasLayer/regen_timer.wait_time = randf_range(0.5, 2)
+	$CanvasLayer/regen_timer.start()
+
+func _on_regen_timer_timeout() -> void:
+	if stamina < max_stamina:
+		stamina += 15
+	else:
+		$CanvasLayer/regen_timer.stop()

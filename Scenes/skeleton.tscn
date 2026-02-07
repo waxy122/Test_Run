@@ -376,6 +376,18 @@ visible = false
 position = Vector2(0, 0.79999995)
 shape = SubResource("CircleShape2D_aiwxb")
 
+[node name="health_bar" type="ProgressBar" parent="." unique_id=1599087941]
+modulate = Color(1, 0, 0, 1)
+offset_left = -13.6
+offset_top = -18.8
+offset_right = 13.999994
+offset_bottom = -14.799999
+max_value = 10.0
+step = 1.0
+value = 3.0
+rounded = true
+show_percentage = false
+
 [connection signal="timeout" from="Timer" to="." method="_on_timer_timeout"]
 [connection signal="body_entered" from="Area2D" to="." method="_on_area_2d_body_entered"]
 [connection signal="body_exited" from="Area2D" to="." method="_on_area_2d_body_exited"]
