@@ -498,7 +498,7 @@ position = Vector2(32, 173)
 scale = Vector2(4, 4)
 texture = ExtResource("6_x3wgy")
 
-[node name="kunai_amm" type="LineEdit" parent="CanvasLayer/kunai" unique_id=543655826]
+[node name="LineEdit" type="LineEdit" parent="CanvasLayer/kunai" unique_id=543655826]
 offset_left = 6.5
 offset_top = -15.0
 offset_right = 75.0
@@ -512,7 +512,7 @@ position = Vector2(32, 173)
 scale = Vector2(4, 4)
 texture = ExtResource("7_3smsa")
 
-[node name="shuriken_amm" type="LineEdit" parent="CanvasLayer/shuriken" unique_id=953342145]
+[node name="LineEdit" type="LineEdit" parent="CanvasLayer/shuriken" unique_id=953342145]
 offset_left = 6.5
 offset_top = -15.0
 offset_right = 75.0

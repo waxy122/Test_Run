@@ -1,8 +1,7 @@
 extends CharacterBody2D
 
-# CONFIG
 var speed := 100.0
-var health := 3
+var health := 10
 
 var x := 1
 var y := 1
@@ -15,13 +14,8 @@ var knockback_velocity := Vector2.ZERO
 var knockback_strength := 250.0
 var knockback_friction := 1200.0
 
-# States
-enum State { IDLE, ATTACK, DIE }
-var state: State = State.IDLE
 var is_dead := false
 
-
-# NODES
 @onready var up: RayCast2D = $Up
 @onready var down: RayCast2D = $Down
 @onready var left: RayCast2D = $Left
@@ -29,20 +23,20 @@ var is_dead := false
 @onready var timer: Timer = $Timer
 @onready var anim: AnimatedSprite2D = $AnimatedSprite2D
 
-# READY
+
 func _ready() -> void:
 	randomize()
 	timer.wait_time = randi_range(1, 4)
 	timer.start()
-	anim.play("idle")
+	play_idle(Vector2.DOWN)
 
-# PHYSICS
+
 func _physics_process(delta: float) -> void:
 	if is_dead:
 		velocity = Vector2.ZERO
 		return
 
-	# Knockback overrides AI
+	# Knockback override
 	if knockback_velocity.length() > 1:
 		velocity = knockback_velocity
 		knockback_velocity = knockback_velocity.move_toward(
@@ -53,16 +47,14 @@ func _physics_process(delta: float) -> void:
 		return
 
 	if detect and target:
-		state = State.ATTACK
 		chase()
 	else:
-		state = State.IDLE
 		wander()
 
 	update_animation()
 	move_and_slide()
 
-# MOVEMENT
+
 func wander():
 	var dir := Vector2(x, y).normalized()
 
@@ -77,47 +69,71 @@ func wander():
 
 	velocity = dir * speed
 
+
 func chase():
 	var dir := (target.global_position - global_position).normalized()
 	velocity = dir * speed * 1.2
 
-# ANIMATION
+
+# =====================
+# ANIMATION (ONLY THING THAT CHANGED)
+# =====================
 func update_animation():
-	match state:
-		State.IDLE:
-			if anim.animation != "idle":
-				anim.play("idle")
+	if velocity == Vector2.ZERO:
+		play_idle(last_move_dir())
+	else:
+		play_run(last_move_dir())
 
-		State.ATTACK:
-			if anim.animation != "attack":
-				anim.play("attack")
 
-		State.DIE:
-			if anim.animation != "die":
-				anim.play("die")
+func last_move_dir() -> Vector2:
+	if abs(velocity.x) > abs(velocity.y):
+		return Vector2(sign(velocity.x), 0)
+	else:
+		return Vector2(0, sign(velocity.y))
 
-# RANDOM DIRECTION
+
+func play_idle(dir: Vector2):
+	if dir.x != 0:
+		anim.flip_h = dir.x < 0
+		anim.play("idle_right")
+	elif dir.y < 0:
+		anim.play("idle_up")
+	else:
+		anim.play("idle_down")
+
+
+func play_run(dir: Vector2):
+	if dir.x != 0:
+		anim.flip_h = dir.x < 0
+		anim.play("run_right")
+	elif dir.y < 0:
+		anim.play("run_up")
+	else:
+		anim.play("run_down")
+
+
 func _on_timer_timeout() -> void:
 	timer.wait_time = randi_range(1, 4)
 	x = [-1, 1].pick_random()
 	y = [-1, 1].pick_random()
 	timer.start()
 
-# DETECTION
+
 func _on_area_2d_body_entered(body: Node2D) -> void:
 	if body.is_in_group("Player"):
 		detect = true
 		target = body
+
 
 func _on_area_2d_body_exited(body: Node2D) -> void:
 	if body.is_in_group("Player"):
 		detect = false
 		target = null
 
-# COMBAT
+
 func _on_hitbox_body_entered(body: Node2D) -> void:
 	if body.is_in_group("Player"):
-		body.hit(global_position, 1)
+		body.hit(global_position, 2)
 
 func hurt(attacker_pos: Vector2, attk: int):
 	if is_dead:
@@ -136,11 +152,8 @@ func hurt(attacker_pos: Vector2, attk: int):
 		die()
 
 func die():
-	$CollisionShape2D.disabled = true
-	$Area2D/CollisionShape2D.disabled = true
-	$hitbox/CollisionShape2D.disabled = true
 	is_dead = true
-	state = State.DIE
+	velocity = Vector2.ZERO
 	anim.play("die")
 	await anim.animation_finished
 	queue_free()

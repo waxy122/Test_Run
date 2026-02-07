@@ -1,0 +1,54 @@
+[gd_scene format=3 uid="uid://bjyi7la8vr8xo"]
+
+[ext_resource type="Texture2D" uid="uid://ceggsr7fg6uep" path="res://Assets/Projectile/Shuriken.png" id="1_5lkuf"]
+
+[sub_resource type="GDScript" id="GDScript_5lkuf"]
+script/source = "extends Area2D
+
+@export var speed := 500.0
+@export var damage := 4
+
+var direction: Vector2 = Vector2.RIGHT
+
+func _ready() -> void:
+	direction = direction.normalized()
+	rotation = direction.angle()
+
+
+func _physics_process(delta: float) -> void:
+	position += direction * speed * delta
+	rotation += 12 * delta
+
+func _on_body_entered(body: Node2D) -> void:
+	if body.is_in_group(\"Enemy\"):
+		body.hurt(global_position, damage)
+		queue_free()
+
+
+func _on_timer_timeout() -> void:
+	queue_free()
+"
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_2ibcj"]
+radius = 10.999678
+height = 21.999355
+
+[node name="Shruiken" type="Area2D" unique_id=1038967133]
+script = SubResource("GDScript_5lkuf")
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=166697358]
+rotation = -0.004565835
+scale = Vector2(1.3, 1.3)
+texture = ExtResource("1_5lkuf")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1495382629]
+rotation = -1.563147
+shape = SubResource("CapsuleShape2D_2ibcj")
+
+[node name="Timer" type="Timer" parent="." unique_id=396455961]
+wait_time = 4.0
+one_shot = true
+autostart = true
+
+[connection signal="body_entered" from="." to="." method="_on_body_entered"]
+[connection signal="timeout" from="Timer" to="." method="_on_timer_timeout"]

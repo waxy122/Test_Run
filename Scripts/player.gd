@@ -1,8 +1,18 @@
 extends CharacterBody2D
 
+@export var can_move: bool = true
 @export var SPEED := 300.0
 @export var health := 10
+@export var atk: int = 1
 var is_dead := false
+var can_throw: bool = true
+var eqp: int = 1 
+var kunai_maxammo : int = 10
+var kunai_ammo: int = 10
+var shuriken_maxammo : int = 5
+var shuriken_ammo: int = 5
+
+
 
 var last_direction: Vector2 = Vector2.RIGHT
 var is_attacking: bool = false
@@ -14,10 +24,17 @@ var knockback_strength := 300.0
 var knockback_friction := 1400.0
 var is_hit := false
 
+@export var kunai_scene: PackedScene
+@export var Shrukien_scene: PackedScene
+@export var Bomb_scene: PackedScene
+
 @onready var animated_sprite_2d: AnimatedSprite2D = $AnimatedSprite2D
 @onready var hitbox: Area2D = $Hitbox
 @onready var swing_sword: AudioStreamPlayer2D = $SwingSword
 @onready var Camera: Camera2D = $Camera2D
+@onready var cd: Timer = $CD
+@onready var kunai_amm: LineEdit = $CanvasLayer/kunai/kunai_amm
+@onready var shuriken_amm: LineEdit = $CanvasLayer/shuriken/shuriken_amm
 
 
 func _ready() -> void:
@@ -46,7 +63,31 @@ func _physics_process(delta: float) -> void:
 	if Input.is_action_just_pressed("attack") and not is_attacking:
 		attack()
 
-	process_movement()
+	if Input.is_action_just_pressed("change_throw"):
+		if eqp == 1:
+			eqp = 2
+			$CanvasLayer/kunai.visible = false
+			$CanvasLayer/shuriken.visible = true
+		elif eqp == 2:
+			eqp = 1
+			$CanvasLayer/kunai.visible = true
+			$CanvasLayer/shuriken.visible = false
+
+	if Input.is_action_just_pressed("Throwable") and not is_attacking and can_throw:
+		can_throw = false
+		cd.start()
+		if eqp == 1 and kunai_ammo > 0:
+			throw_kunai()
+			kunai_ammo -= 1
+		elif eqp == 2 and shuriken_ammo > 0:
+			throw_shruiken()
+			shuriken_ammo -= 1
+	
+	kunai_amm.text = str(kunai_ammo)
+	shuriken_amm.text = str(shuriken_ammo)
+	
+	if can_move:
+		process_movement()
 	_process_animation()
 	move_and_slide()
 
@@ -94,6 +135,18 @@ func _on_animated_sprite_2d_animation_finished() -> void:
 	if is_attacking:
 		is_attacking = false
 
+func throw_kunai():
+	var k = kunai_scene.instantiate()
+	k.global_position = global_position
+	k.direction = last_direction
+	get_tree().current_scene.add_child(k)
+
+func throw_shruiken():
+	var s = Shrukien_scene.instantiate()
+	s.global_position = global_position
+	s.direction = last_direction
+	get_tree().current_scene.add_child(s)
+
 
 func update_hitbox_offset() -> void:
 	var x := hitbox_offset.x
@@ -113,21 +166,19 @@ func update_hitbox_offset() -> void:
 func _on_hitbox_body_entered(body: Node) -> void:
 	if is_attacking and body.is_in_group("Enemy"):
 		Camera.shake(0.6)
-		body.hurt(global_position)
+		body.hurt(global_position, atk)
 
 
 #Combat
-func hit(attacker_pos: Vector2):
+func hit(attacker_pos: Vector2, dmg: int):
 	if is_hit or is_dead:
 		return
 
 	is_hit = true
-	health -= 1
+	health -= dmg
 
 	var dir := (global_position - attacker_pos).normalized()
 	knockback_velocity = dir * knockback_strength
-
-	animated_sprite_2d.play("hurt")
 	Camera.shake(0.9)
 
 	# flash effect (invulnerability feedback)
@@ -154,3 +205,7 @@ func die():
 
 	await animated_sprite_2d.animation_finished
 	queue_free() # swap with respawn if you want
+
+
+func _on_cd_timeout() -> void:
+	can_throw = true
