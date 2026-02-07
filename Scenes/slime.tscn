@@ -1,6 +1,7 @@
 [gd_scene format=3 uid="uid://cyijnym71f15p"]
 
 [ext_resource type="Texture2D" uid="uid://d31ou4x0v7f66" path="res://Assets/Images/Enemies/Slime_Green.png" id="1_jokqx"]
+[ext_resource type="Script" uid="uid://dfxtkaty8422n" path="res://Scripts/slime.gd" id="1_swwnm"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_jokqx"]
 atlas = ExtResource("1_jokqx")
@@ -138,7 +139,7 @@ animations = [{
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_d6mpm")
 }],
-"loop": true,
+"loop": false,
 "name": &"die",
 "speed": 7.0
 }, {
@@ -160,17 +161,65 @@ animations = [{
 "speed": 7.0
 }]
 
-[sub_resource type="CircleShape2D" id="CircleShape2D_jokqx"]
-radius = 7.3756356
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_swwnm"]
+radius = 7.994198
+height = 21.610682
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_swwnm"]
+radius = 84.642296
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_aiwxb"]
+radius = 14.0057125
 
 [node name="Slime" type="CharacterBody2D" unique_id=1412222983 groups=["Enemy"]]
 scale = Vector2(2.5, 2.5)
+script = ExtResource("1_swwnm")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=687889871 groups=["Enemy"]]
 sprite_frames = SubResource("SpriteFrames_llvkk")
-animation = &"idle"
+animation = &"die"
 autoplay = "idle"
-frame_progress = 0.72659683
+frame = 7
+frame_progress = 1.0
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1738875638]
-shape = SubResource("CircleShape2D_jokqx")
+position = Vector2(0.4, 0.4)
+rotation = -1.5778041
+shape = SubResource("CapsuleShape2D_swwnm")
+
+[node name="Up" type="RayCast2D" parent="." unique_id=668257693]
+visible = false
+target_position = Vector2(0, -23.599998)
+
+[node name="Down" type="RayCast2D" parent="." unique_id=1758770486]
+visible = false
+target_position = Vector2(-0.79999995, 21.199999)
+
+[node name="Left" type="RayCast2D" parent="." unique_id=387565048]
+visible = false
+target_position = Vector2(-23.599998, 0.39999998)
+
+[node name="Right" type="RayCast2D" parent="." unique_id=1509116816]
+visible = false
+target_position = Vector2(25.199999, 0)
+
+[node name="Timer" type="Timer" parent="." unique_id=1537486922]
+wait_time = 1.3079999999999998
+
+[node name="Area2D" type="Area2D" parent="." unique_id=411791979]
+visible = false
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D" unique_id=1335143664]
+shape = SubResource("CircleShape2D_swwnm")
+
+[node name="hitbox" type="Area2D" parent="." unique_id=1215921922]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="hitbox" unique_id=1362459708]
+visible = false
+position = Vector2(0, 0.79999995)
+shape = SubResource("CircleShape2D_aiwxb")
+
+[connection signal="timeout" from="Timer" to="." method="_on_timer_timeout"]
+[connection signal="body_entered" from="Area2D" to="." method="_on_area_2d_body_entered"]
+[connection signal="body_exited" from="Area2D" to="." method="_on_area_2d_body_exited"]
+[connection signal="body_entered" from="hitbox" to="." method="_on_hitbox_body_entered"]

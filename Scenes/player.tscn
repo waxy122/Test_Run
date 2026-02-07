@@ -278,7 +278,7 @@ animations = [{
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_y6uwr")
 }],
-"loop": true,
+"loop": false,
 "name": &"dying",
 "speed": 7.0
 }, {
@@ -425,17 +425,42 @@ animations = [{
 radius = 6.0
 height = 19.5
 
+[sub_resource type="GDScript" id="GDScript_6t5aa"]
+script/source = "extends Camera2D
+
+@export var shake_strength := 8.0
+@export var shake_decay := 20.0
+
+var shake_amount := 0.0
+var original_offset := Vector2.ZERO
+
+func _ready():
+	original_offset = offset
+
+func _process(delta):
+	if shake_amount > 0:
+		shake_amount = move_toward(shake_amount, 0, shake_decay * delta)
+		offset = original_offset + Vector2(
+			randf_range(-shake_amount, shake_amount),
+			randf_range(-shake_amount, shake_amount)
+		)
+	else:
+		offset = original_offset
+
+func shake(strength := 8.0):
+	shake_amount = strength
+"
+
 [sub_resource type="CircleShape2D" id="CircleShape2D_6t5aa"]
 
-[node name="Player" type="CharacterBody2D" unique_id=245131472]
+[node name="Player" type="CharacterBody2D" unique_id=245131472 groups=["Player"]]
 z_index = 1
 scale = Vector2(4, 4)
 script = ExtResource("1_cvnsp")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=269607944]
 sprite_frames = SubResource("SpriteFrames_8erm5")
-animation = &"attack_right"
-frame = 1
+animation = &"idle_up"
 
 [node name="SwingSword" type="AudioStreamPlayer2D" parent="." unique_id=329803298]
 stream = ExtResource("3_6t5aa")
@@ -447,13 +472,12 @@ visible = false
 shape = SubResource("CapsuleShape2D_6t5aa")
 
 [node name="Camera2D" type="Camera2D" parent="." unique_id=525547339]
-position_smoothing_enabled = true
 position_smoothing_speed = 3.0
-rotation_smoothing_enabled = true
 rotation_smoothing_speed = 4.67
+script = SubResource("GDScript_6t5aa")
 
 [node name="Hitbox" type="Area2D" parent="." unique_id=122300875]
-position = Vector2(5.5, 2.25)
+position = Vector2(14.5, 0.5)
 metadata/_edit_group_ = true
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Hitbox" unique_id=701607812]
