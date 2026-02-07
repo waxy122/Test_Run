@@ -163,13 +163,14 @@ animations = [{
 [sub_resource type="CircleShape2D" id="CircleShape2D_jokqx"]
 radius = 7.3756356
 
-[node name="Slime" type="CharacterBody2D" unique_id=1412222983]
+[node name="Slime" type="CharacterBody2D" unique_id=1412222983 groups=["Enemy"]]
 scale = Vector2(2.5, 2.5)
 
-[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=687889871]
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=687889871 groups=["Enemy"]]
 sprite_frames = SubResource("SpriteFrames_llvkk")
 animation = &"idle"
 autoplay = "idle"
+frame_progress = 0.72659683
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1738875638]
 shape = SubResource("CircleShape2D_jokqx")

@@ -18,13 +18,10 @@ func _ready() -> void:
 func _physics_process(_delta: float) -> void:
 	hitbox.monitoring = false
 	
+	#attack sys
 	if Input.is_action_just_pressed("attack") and not is_attacking:
 		attack()
-	
-	if is_attacking:
-		velocity = Vector2.ZERO
-		return
-	
+
 	process_movement()
 	_process_animation()
 	move_and_slide()
@@ -86,5 +83,5 @@ func update_hitbox_offset() -> void:
 
 
 func _on_hitbox_body_entered(body: Node) -> void:
-	if is_attacking and body.name.begins_with("Slime"):
-		print("Hit:", body.name)
+	if is_attacking and body.is_in_group("Enemy"):
+		print("Hit an enemy!")

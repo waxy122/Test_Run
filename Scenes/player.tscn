@@ -421,6 +421,10 @@ animations = [{
 "speed": 7.0
 }]
 
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_6t5aa"]
+radius = 6.0
+height = 19.5
+
 [sub_resource type="CircleShape2D" id="CircleShape2D_6t5aa"]
 
 [node name="Player" type="CharacterBody2D" unique_id=245131472]
@@ -437,6 +441,16 @@ frame = 1
 stream = ExtResource("3_6t5aa")
 volume_db = -8.0
 pitch_scale = 3.0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1705290153]
+visible = false
+shape = SubResource("CapsuleShape2D_6t5aa")
+
+[node name="Camera2D" type="Camera2D" parent="." unique_id=525547339]
+position_smoothing_enabled = true
+position_smoothing_speed = 3.0
+rotation_smoothing_enabled = true
+rotation_smoothing_speed = 4.67
 
 [node name="Hitbox" type="Area2D" parent="." unique_id=122300875]
 position = Vector2(5.5, 2.25)
