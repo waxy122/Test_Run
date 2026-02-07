@@ -1,47 +1,26 @@
 extends CharacterBody2D
 
-# ========================
-# Variables
-# ========================
-
 const SPEED := 300.0
 
 var last_direction: Vector2 = Vector2.RIGHT
 var is_attacking: bool = false
 var hitbox_offset: Vector2
 
-# ========================
-# Node references
-# ========================
-
 @onready var animated_sprite_2d: AnimatedSprite2D = $AnimatedSprite2D
 @onready var hitbox: Area2D = $Hitbox
 @onready var swing_sword: AudioStreamPlayer2D = $SwingSword
-
-
-# ========================
-# Ready
-# ========================
 
 func _ready() -> void:
 	# Store the initial hitbox offset
 	hitbox_offset = hitbox.position
 	hitbox.monitoring = false
 
-
-# ========================
-# Physics Process
-# ========================
-
 func _physics_process(_delta: float) -> void:
-	# Disable hitbox unless attacking
 	hitbox.monitoring = false
 	
-	# Attack input (only if not already attacking)
 	if Input.is_action_just_pressed("attack") and not is_attacking:
 		attack()
 	
-	# Skip movement if attacking
 	if is_attacking:
 		velocity = Vector2.ZERO
 		return
@@ -50,25 +29,15 @@ func _physics_process(_delta: float) -> void:
 	_process_animation()
 	move_and_slide()
 
-
-# ========================
-# Movement
-# ========================
-
 func process_movement() -> void:
 	var direction := Input.get_vector("left", "right", "up", "down")
-	
+
 	if direction != Vector2.ZERO:
 		velocity = direction * SPEED
 		last_direction = direction
 		update_hitbox_offset()
 	else:
 		velocity = Vector2.ZERO
-
-
-# ========================
-# Animation
-# ========================
 
 func _process_animation() -> void:
 	if is_attacking:
@@ -89,11 +58,6 @@ func play_animation(prefix: String, dir: Vector2) -> void:
 	elif dir.y > 0:
 		animated_sprite_2d.play(prefix + "_down")
 
-
-# ========================
-# Attacking
-# ========================
-
 func attack() -> void:
 	is_attacking = true
 	hitbox.monitoring = true
@@ -105,11 +69,6 @@ func attack() -> void:
 func _on_animated_sprite_2d_animation_finished() -> void:
 	if is_attacking:
 		is_attacking = false
-
-
-# ========================
-# Hitbox
-# ========================
 
 func update_hitbox_offset() -> void:
 	var x := hitbox_offset.x
