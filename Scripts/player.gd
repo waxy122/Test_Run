@@ -1,7 +1,7 @@
 extends CharacterBody2D
 
 @export var can_move: bool = true
-@export var SPEED := 300.0
+@export var SPEED := 200
 @export var health := 10
 @export var atk: int = 1
 var is_dead := false
@@ -47,6 +47,7 @@ var enemy_health : int
 @onready var shuriken_amm: LineEdit = $CanvasLayer/shuriken/shuriken_amm
 @onready var health_bar: ProgressBar = $CanvasLayer/health_bar
 @onready var stamina_bar: ProgressBar = $"CanvasLayer/stamina bar"
+@onready var cords: Label = $CanvasLayer/cords
 
 
 #throw animations, throw_up, throw_down, throw_right
@@ -57,6 +58,7 @@ func _ready() -> void:
 
 
 func _physics_process(delta: float) -> void:
+	cords.text = str(Vector2i(global_position))
 	health_bar.value = float(health) / 10 * health_bar.max_value
 	stamina_bar.value = float(stamina)
 	if is_dead:
@@ -87,11 +89,11 @@ func _physics_process(delta: float) -> void:
 		attack()
 
 	if Input.is_action_pressed("Sprint") and stamina > 0 and velocity != Vector2.ZERO:
-		SPEED = 500
+		SPEED = 400
 		stamina -= float(25) * delta
 		$CanvasLayer/regen_timer.stop()
 	else:
-		SPEED = 300
+		SPEED = 200
 		if stamina < max_stamina and $CanvasLayer/regen_timer.is_stopped():
 			$CanvasLayer/regen_timer.start()
 

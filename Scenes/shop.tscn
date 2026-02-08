@@ -1,0 +1,286 @@
+[gd_scene format=3 uid="uid://cucj08iog1veg"]
+
+[ext_resource type="Texture2D" uid="uid://bsg3hc3xmdino" path="res://Assets/Tilemaps/TilesetHouse.png" id="1_a0mxf"]
+[ext_resource type="Texture2D" uid="uid://dkkcvpmdx71kr" path="res://Assets/Treasure/Spritesheets/Spritesheet_UI_Flat.png" id="2_2shtd"]
+[ext_resource type="Texture2D" uid="uid://d38dt032b5qar" path="res://Assets/Characters/Boy/Faceset.png" id="3_io27d"]
+[ext_resource type="Texture2D" uid="uid://c1odojkhfjgyb" path="res://Assets/Projectile/Kunai.png" id="4_fdj0q"]
+[ext_resource type="Texture2D" uid="uid://ceyj1e5xp3d6e" path="res://Assets/Foods/Beaf.png" id="5_k6jq0"]
+[ext_resource type="Texture2D" uid="uid://ceggsr7fg6uep" path="res://Assets/Projectile/Shuriken.png" id="5_ymrm4"]
+[ext_resource type="Texture2D" uid="uid://bls1c2byowvdv" path="res://Assets/Foods/Honey.png" id="6_3ps1r"]
+[ext_resource type="Texture2D" uid="uid://clgv4m8i83s68" path="res://Assets/Foods/Noodle.png" id="8_s8dlv"]
+[ext_resource type="Texture2D" uid="uid://cdre0ktse0da3" path="res://Assets/Projectile/game-item-pixelated-sword-free-png.png" id="9_tyrku"]
+
+[sub_resource type="GDScript" id="GDScript_a0mxf"]
+script/source = "extends StaticBody2D
+
+
+
+
+func _on_area_2d_body_entered(body: Node2D) -> void:
+	if body.is_in_group(\"Player\"):
+		body.can_move = false
+		$CanvasLayer/VBoxContainer.visible = true
+		$CanvasLayer/VBoxContainer/shopkeeper/dialouge/AnimationPlayer.play(\"text\")
+"
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_a0mxf"]
+size = Vector2(63, 47)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_2shtd"]
+size = Vector2(16, 20)
+
+[sub_resource type="Animation" id="Animation_fdj0q"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:visible_ratio")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [1.0]
+}
+
+[sub_resource type="Animation" id="Animation_io27d"]
+resource_name = "text"
+length = 3.0
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:visible_ratio")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 1.561378, 3),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [0.0, 0.481, 1.0]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_fdj0q"]
+_data = {
+&"RESET": SubResource("Animation_fdj0q"),
+&"text": SubResource("Animation_io27d")
+}
+
+[node name="shop" type="StaticBody2D" unique_id=147366885]
+scale = Vector2(2, 2)
+script = SubResource("GDScript_a0mxf")
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=138920845]
+texture = ExtResource("1_a0mxf")
+region_enabled = true
+region_rect = Rect2(304.1586, 0.35990334, 64.209564, 47.662575)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=2086701012]
+visible = false
+position = Vector2(-0.5, -0.5)
+shape = SubResource("RectangleShape2D_a0mxf")
+
+[node name="Area2D" type="Area2D" parent="." unique_id=747779900]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D" unique_id=1229253030]
+position = Vector2(8, 17)
+shape = SubResource("RectangleShape2D_2shtd")
+
+[node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=1120441925]
+
+[node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer" unique_id=1102707724]
+offset_left = 1.0
+offset_top = 274.0
+offset_right = 1282.0
+offset_bottom = 713.0
+
+[node name="Sprite2D" type="Sprite2D" parent="CanvasLayer/VBoxContainer" unique_id=1919705573]
+position = Vector2(637.50006, 330)
+scale = Vector2(20.11111, 7)
+texture = ExtResource("2_2shtd")
+region_enabled = true
+region_rect = Rect2(320.19843, 31.984985, 63.75705, 32.18564)
+
+[node name="shopkeeper" type="Sprite2D" parent="CanvasLayer/VBoxContainer" unique_id=1668257101]
+position = Vector2(1182, 121)
+scale = Vector2(5, 5)
+texture = ExtResource("3_io27d")
+
+[node name="dialouge" type="Label" parent="CanvasLayer/VBoxContainer/shopkeeper" unique_id=2013059463]
+offset_left = -229.40001
+offset_top = 21.999998
+offset_right = 1051.6
+offset_bottom = 143.0
+scale = Vector2(0.18911894, 0.29821727)
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/font_size = 43
+text = "Welcome, traveler… what fortune has led you here? If you’ve 
+goods of value, I might be persuaded to part with some coin."
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="CanvasLayer/VBoxContainer/shopkeeper/dialouge" unique_id=941328726]
+libraries/ = SubResource("AnimationLibrary_fdj0q")
+
+[node name="Panel" type="Panel" parent="CanvasLayer" unique_id=1750013281]
+offset_left = 4.0
+offset_top = 5.0
+offset_right = 547.0
+offset_bottom = 485.0
+
+[node name="Label" type="Label" parent="CanvasLayer/Panel" unique_id=1245430470]
+layout_mode = 0
+offset_left = 213.0
+offset_top = -1.0
+offset_right = 290.0
+offset_bottom = 44.0
+theme_override_font_sizes/font_size = 32
+text = "Shop"
+
+[node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer/Panel" unique_id=1420567225]
+layout_mode = 0
+offset_left = -2.0
+offset_top = 57.0
+offset_right = 463.0
+offset_bottom = 480.0
+
+[node name="kunai" type="Sprite2D" parent="CanvasLayer/Panel/VBoxContainer" unique_id=1814088823]
+position = Vector2(51.000004, 64.00001)
+scale = Vector2(5, 5)
+texture = ExtResource("4_fdj0q")
+
+[node name="Button" type="Button" parent="CanvasLayer/Panel/VBoxContainer/kunai" unique_id=527569302]
+offset_left = 15.2
+offset_top = -5.3999996
+offset_right = 50.2
+offset_bottom = 25.6
+scale = Vector2(0.35459772, 0.31950963)
+text = "Buy
+"
+metadata/_edit_use_anchors_ = true
+
+[node name="own" type="Label" parent="CanvasLayer/Panel/VBoxContainer/kunai" unique_id=1685310476]
+offset_left = 3.3999991
+offset_top = 3.9999971
+offset_right = 13.4
+offset_bottom = 26.999996
+scale = Vector2(0.666148, 0.32835954)
+text = "5"
+
+[node name="shuriken" type="Sprite2D" parent="CanvasLayer/Panel/VBoxContainer" unique_id=1375722336]
+position = Vector2(49.999996, 161.00002)
+scale = Vector2(5, 5)
+texture = ExtResource("5_ymrm4")
+
+[node name="Button" type="Button" parent="CanvasLayer/Panel/VBoxContainer/shuriken" unique_id=1546398926]
+offset_left = 14.599999
+offset_top = -5.400001
+offset_right = 49.6
+offset_bottom = 25.599998
+scale = Vector2(0.35459772, 0.31950963)
+text = "Buy
+"
+metadata/_edit_use_anchors_ = true
+
+[node name="own2" type="Label" parent="CanvasLayer/Panel/VBoxContainer/shuriken" unique_id=1895783814]
+offset_left = 3.6000004
+offset_top = 2.7999973
+offset_right = 13.6
+offset_bottom = 25.799997
+scale = Vector2(0.666148, 0.32835954)
+text = "5"
+
+[node name="beef" type="Sprite2D" parent="CanvasLayer/Panel/VBoxContainer" unique_id=819989195]
+position = Vector2(49, 264)
+scale = Vector2(5, 5)
+texture = ExtResource("5_k6jq0")
+
+[node name="own3" type="Label" parent="CanvasLayer/Panel/VBoxContainer/beef" unique_id=1386999780]
+offset_left = 3.7999992
+offset_top = 2.8000011
+offset_right = 13.799999
+offset_bottom = 25.800001
+scale = Vector2(0.666148, 0.32835954)
+text = "5"
+
+[node name="Button" type="Button" parent="CanvasLayer/Panel/VBoxContainer/beef" unique_id=1333115228]
+offset_left = 14.599999
+offset_top = -5.400001
+offset_right = 49.6
+offset_bottom = 25.599998
+scale = Vector2(0.35459772, 0.31950963)
+text = "Buy
+"
+metadata/_edit_use_anchors_ = true
+
+[node name="honey" type="Sprite2D" parent="CanvasLayer/Panel/VBoxContainer" unique_id=300782225]
+position = Vector2(49, 366)
+scale = Vector2(5, 5)
+texture = ExtResource("6_3ps1r")
+
+[node name="Button" type="Button" parent="CanvasLayer/Panel/VBoxContainer/honey" unique_id=1912073890]
+offset_left = 14.599999
+offset_top = -5.400001
+offset_right = 49.6
+offset_bottom = 25.599998
+scale = Vector2(0.35459772, 0.31950963)
+text = "Buy
+"
+metadata/_edit_use_anchors_ = true
+
+[node name="own3" type="Label" parent="CanvasLayer/Panel/VBoxContainer/honey" unique_id=1551205739]
+offset_left = 3.7999992
+offset_top = 2.8000011
+offset_right = 13.799999
+offset_bottom = 25.800001
+scale = Vector2(0.666148, 0.32835954)
+text = "5"
+
+[node name="noodles" type="Sprite2D" parent="CanvasLayer/Panel/VBoxContainer" unique_id=1005822346]
+position = Vector2(326, 66)
+scale = Vector2(5, 5)
+texture = ExtResource("8_s8dlv")
+
+[node name="Button" type="Button" parent="CanvasLayer/Panel/VBoxContainer/noodles" unique_id=1283070925]
+offset_left = 14.599999
+offset_top = -5.400001
+offset_right = 49.6
+offset_bottom = 25.599998
+scale = Vector2(0.35459772, 0.31950963)
+text = "Buy
+"
+metadata/_edit_use_anchors_ = true
+
+[node name="own3" type="Label" parent="CanvasLayer/Panel/VBoxContainer/noodles" unique_id=173341484]
+offset_left = 3.7999992
+offset_top = 2.8000011
+offset_right = 13.799999
+offset_bottom = 25.800001
+scale = Vector2(0.666148, 0.32835954)
+text = "5"
+
+[node name="sword" type="Sprite2D" parent="CanvasLayer/Panel/VBoxContainer" unique_id=400325398]
+position = Vector2(329, 166)
+scale = Vector2(0.2, 0.2)
+texture = ExtResource("9_tyrku")
+
+[node name="Button" type="Button" parent="CanvasLayer/Panel/VBoxContainer/sword" unique_id=1359380322]
+offset_left = 369.99994
+offset_top = -109.999985
+offset_right = 407.99994
+offset_bottom = -78.999985
+rotation = -0.0022197338
+scale = Vector2(8.409651, 7.7207446)
+text = "Buy
+"
+metadata/_edit_use_anchors_ = true
+
+[node name="own3" type="Label" parent="CanvasLayer/Panel/VBoxContainer/sword/Button" unique_id=313455816]
+layout_mode = 0
+offset_left = -34.526337
+offset_top = 20.639961
+offset_right = -24.526337
+offset_bottom = 43.63996
+scale = Vector2(1.6427792, 1.1257919)
+text = "5"
+
+[connection signal="body_entered" from="Area2D" to="." method="_on_area_2d_body_entered"]

@@ -4,7 +4,8 @@
 [ext_resource type="PackedScene" uid="uid://cyijnym71f15p" path="res://Scenes/slime.tscn" id="2_bo1nx"]
 [ext_resource type="Texture2D" uid="uid://c2iir6dw5pg8u" path="res://Assets/Tilemaps/TilesetField.png" id="3_8gbba"]
 [ext_resource type="PackedScene" uid="uid://wsee2urpo12e" path="res://Scenes/skeleton.tscn" id="4_jjvhh"]
-[ext_resource type="PackedScene" uid="uid://dwrh741et0lok" path="res://Scenes/world.tscn" id="5_kry3j"]
+[ext_resource type="PackedScene" uid="uid://clm7rutpqnyg4" path="res://Scenes/world.tscn" id="5_kry3j"]
+[ext_resource type="PackedScene" uid="uid://cucj08iog1veg" path="res://Scenes/shop.tscn" id="6_21xkr"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_jjvhh"]
 texture = ExtResource("3_8gbba")
@@ -98,6 +99,10 @@ position = Vector2(-2.4414061e-05, 0)
 position = Vector2(141, 265)
 
 [node name="World" parent="." unique_id=80975412 instance=ExtResource("5_kry3j")]
+visible = false
 z_index = -2
+
+[node name="shop" parent="." unique_id=147366885 instance=ExtResource("6_21xkr")]
+position = Vector2(693, 175)
 
 [editable path="Slime"]
