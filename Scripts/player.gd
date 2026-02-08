@@ -8,15 +8,15 @@ var is_dead := false
 var can_throw: bool = true
 var eqp: int = 1 
 var kunai_maxammo : int = 10
-var kunai_ammo: int = 10
+var kunai_ammo: int = Inv.get_count("kunai")
 var shuriken_maxammo : int = 5
-var shuriken_ammo: int = 5
+var shuriken_ammo: int = Inv.get_count("shuriken")
 var max_stamina: int = 100
 var stamina: int = 100
 
-
 var last_direction: Vector2 = Vector2.RIGHT
 var is_attacking: bool = false
+var is_throwing: bool = false
 var hitbox_offset: Vector2
 
 # Knockback
@@ -40,6 +40,7 @@ var is_hit := false
 @onready var stamina_bar: ProgressBar = $"CanvasLayer/stamina bar"
 
 
+#throw animations, throw_up, throw_down, throw_right
 
 func _ready() -> void:
 	hitbox_offset = hitbox.position
@@ -92,11 +93,14 @@ func _physics_process(delta: float) -> void:
 
 	if Input.is_action_just_pressed("Throwable") and not is_attacking and can_throw:
 		var thrown := false
+
 		if eqp == 1 and kunai_ammo > 0:
+			play_throw_animation(last_direction)
 			throw_kunai()
 			kunai_ammo -= 1
 			thrown = true
 		elif eqp == 2 and shuriken_ammo > 0:
+			play_throw_animation(last_direction)
 			throw_shruiken()
 			shuriken_ammo -= 1
 			thrown = true
@@ -104,6 +108,7 @@ func _physics_process(delta: float) -> void:
 		if thrown:
 			can_throw = false
 			cd.start()
+
 	
 	kunai_amm.text = str(kunai_ammo)
 	shuriken_amm.text = str(shuriken_ammo)
@@ -128,13 +133,24 @@ func process_movement() -> void:
 
 
 func _process_animation() -> void:
-	if is_attacking or is_hit:
+	if is_attacking or is_hit or is_throwing:
 		return
 
 	if velocity != Vector2.ZERO:
 		play_animation("run", last_direction)
 	else:
 		play_animation("idle", last_direction)
+
+func play_throw_animation(dir: Vector2):
+	is_throwing = true
+
+	if dir.x != 0:
+		animated_sprite_2d.flip_h = dir.x < 0
+		animated_sprite_2d.play("throw_right")
+	elif dir.y < 0:
+		animated_sprite_2d.play("throw_up")
+	else:
+		animated_sprite_2d.play("throw_down")
 
 
 func play_animation(prefix: String, dir: Vector2) -> void:
@@ -158,6 +174,11 @@ func attack() -> void:
 func _on_animated_sprite_2d_animation_finished() -> void:
 	if is_attacking:
 		is_attacking = false
+
+	if is_throwing:
+		is_throwing = false
+		can_move = true
+
 
 func throw_kunai():
 	var k = kunai_scene.instantiate()
