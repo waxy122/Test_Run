@@ -20,11 +20,19 @@ var is_attacking: bool = false
 var is_throwing: bool = false
 var hitbox_offset: Vector2
 
-# Knockback
+#Finisher
+var combo_count := 0
+var combo_timer := 0.0
+const COMBO_WINDOW := 2.0
+var finisher_target: Node2D = null
+
+
+#Knockback
 var knockback_velocity: Vector2 = Vector2.ZERO
 var knockback_strength := 300.0
 var knockback_friction := 1400.0
 var is_hit := false
+var enemy_health : int
 
 @export var kunai_scene: PackedScene
 @export var Shrukien_scene: PackedScene
@@ -55,7 +63,7 @@ func _physics_process(delta: float) -> void:
 		velocity = Vector2.ZERO
 		return
 
-	# Knockback takes priority
+	# Knockback
 	if knockback_velocity.length() > 1:
 		velocity = knockback_velocity
 		knockback_velocity = knockback_velocity.move_toward(
@@ -65,13 +73,20 @@ func _physics_process(delta: float) -> void:
 		move_and_slide()
 		return
 
+	#Finsiher
+	if combo_count > 0:
+		combo_timer += delta
+		if combo_timer > COMBO_WINDOW:
+			reset_combo()
+
+
 	if not is_attacking:
 		hitbox.monitoring = false
 
 	if Input.is_action_just_pressed("attack") and not is_attacking:
 		attack()
 
-	if Input.is_action_pressed("Sprint") and stamina > 0:
+	if Input.is_action_pressed("Sprint") and stamina > 0 and velocity != Vector2.ZERO:
 		SPEED = 500
 		stamina -= float(25) * delta
 		$CanvasLayer/regen_timer.stop()
@@ -100,6 +115,7 @@ func _physics_process(delta: float) -> void:
 			throw_kunai()
 			kunai_ammo -= 1
 			thrown = true
+
 		elif eqp == 2 and shuriken_ammo > 0:
 			play_throw_animation(last_direction)
 			throw_shruiken()
@@ -108,6 +124,8 @@ func _physics_process(delta: float) -> void:
 
 		if thrown:
 			can_throw = false
+			$CanvasLayer/kunai.self_modulate = Color(1,1,1,0.5)
+			$CanvasLayer/shuriken.self_modulate = Color(1,1,1,0.5)
 			cd.start()
 
 	
@@ -170,15 +188,19 @@ func attack() -> void:
 
 	play_animation("attack", last_direction)
 	swing_sword.play()
+	await animated_sprite_2d.animation_finished 
+	is_attacking = false
 
 
 func _on_animated_sprite_2d_animation_finished() -> void:
 	if is_attacking:
 		is_attacking = false
+		hitbox.monitoring = false
 
 	if is_throwing:
 		is_throwing = false
 		can_move = true
+
 
 
 func throw_kunai():
@@ -213,6 +235,10 @@ func _on_hitbox_body_entered(body: Node) -> void:
 	if is_attacking and body.is_in_group("Enemy"):
 		Camera.shake(0.6)
 		body.hurt(global_position, atk)
+		enemy_health = body.health
+		finisher_target = body   # ← ADD THIS
+		register_combo_hit()
+
 
 
 #Combat
@@ -255,6 +281,8 @@ func die():
 
 func _on_cd_timeout() -> void:
 	can_throw = true
+	$CanvasLayer/kunai.self_modulate = Color(1,1,1,1)
+	$CanvasLayer/shuriken.self_modulate = Color(1,1,1,1)
 
 func regen():
 	stamina += 15 
@@ -266,3 +294,58 @@ func _on_regen_timer_timeout() -> void:
 		stamina += 15
 	else:
 		$CanvasLayer/regen_timer.stop()
+
+func register_combo_hit():
+	if combo_count == 0:
+		combo_timer = 0.0
+
+	combo_count += 1
+
+	if combo_count >= 4 and enemy_health <= 3:
+		finisher()
+		reset_combo()
+		
+
+func reset_combo():
+	combo_count = 0
+	combo_timer = 0.0
+
+func finisher():
+	if finisher_target == null or not is_instance_valid(finisher_target):
+		return
+
+	can_move = false
+	is_attacking = false
+	is_throwing = false
+
+	# direction from enemy to player
+	var dir := (global_position - finisher_target.global_position).normalized()
+
+	# first dramatic pause
+	get_tree().paused = true
+	await get_tree().create_timer(0.4, true).timeout
+	get_tree().paused = false
+	
+	# flash
+	$CanvasLayer/ColorRect.visible = true
+	await get_tree().create_timer(0.05).timeout
+	$CanvasLayer/ColorRect.visible = false
+	
+	# teleport behind enemy
+	var offset := -200.0
+	global_position = finisher_target.global_position + dir * offset
+
+	# face the enemy
+	last_direction = -dir
+
+	# 🔥 APPLY FINISHER DAMAGE (guaranteed kill)
+	finisher_target.hurt(global_position, 10)
+
+	Camera.shake(2.0)
+
+	# final hit-stop
+	get_tree().paused = true
+	await get_tree().create_timer(0.4, true).timeout
+	get_tree().paused = false
+
+	can_move = true
