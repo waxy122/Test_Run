@@ -54,9 +54,11 @@ var enemy_health : int
 func _ready() -> void:
 	hitbox_offset = hitbox.position
 	hitbox.monitoring = false
+	Inv.add("coins" , 10)
 
 
 func _physics_process(delta: float) -> void:
+	$CanvasLayer/coins/Label2.text = str(Inv.get_count("coins"))
 	health_bar.value = float(health) / 10 * health_bar.max_value
 	stamina_bar.value = float(stamina)
 	if is_dead:
