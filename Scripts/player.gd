@@ -36,7 +36,7 @@ var is_hit := false
 @onready var cd: Timer = $CD
 @onready var kunai_amm: LineEdit = $CanvasLayer/kunai/kunai_amm
 @onready var shuriken_amm: LineEdit = $CanvasLayer/shuriken/shuriken_amm
-@onready var health_bar: ProgressBar = $CanvasLayer/health_barddddd
+@onready var health_bar: ProgressBar = $CanvasLayer/health_bar
 
 
 func _ready() -> void:
@@ -45,7 +45,7 @@ func _ready() -> void:
 
 
 func _physics_process(delta: float) -> void:
-	health_bar.value = health
+	health_bar.value = float(health) / 10 * health_bar.max_value
 	if is_dead:
 		velocity = Vector2.ZERO
 		return
