@@ -3,17 +3,16 @@ extends CharacterBody2D
 @export var can_move: bool = true
 @export var SPEED := 200
 @export var health := 10
-@export var atk: int = 1
+@export var atk: int = 1 * Inv.get_count("sword_lvl")
 var is_dead := false
 var can_throw: bool = true
 var eqp: int = 1 
 var kunai_maxammo : int = 10
-var kunai_ammo: int = Inv.get_count("kunai")
+var kunai_ammo: int
 var shuriken_maxammo : int = 5
-var shuriken_ammo: int = Inv.get_count("shuriken")
+var shuriken_ammo: int
 var max_stamina: int = 100
 var stamina: int = 100
-
 
 var last_direction: Vector2 = Vector2.RIGHT
 var is_attacking: bool = false
@@ -56,8 +55,9 @@ func _ready() -> void:
 	hitbox_offset = hitbox.position
 	hitbox.monitoring = false
 
-
 func _physics_process(delta: float) -> void:
+	shuriken_ammo = Inv.get_count("shuriken")
+	kunai_ammo = Inv.get_count("kunai")
 	cords.text = str(Vector2i(global_position))
 	health_bar.value = float(health) / 10 * health_bar.max_value
 	stamina_bar.value = float(stamina)
@@ -115,13 +115,13 @@ func _physics_process(delta: float) -> void:
 		if eqp == 1 and kunai_ammo > 0:
 			play_throw_animation(last_direction)
 			throw_kunai()
-			kunai_ammo -= 1
+			Inv.remove("kunai" , 1) 
 			thrown = true
 
 		elif eqp == 2 and shuriken_ammo > 0:
 			play_throw_animation(last_direction)
 			throw_shruiken()
-			shuriken_ammo -= 1
+			Inv.remove("shuriken" , 1) 
 			thrown = true
 
 		if thrown:
@@ -238,7 +238,7 @@ func _on_hitbox_body_entered(body: Node) -> void:
 		Camera.shake(0.6)
 		body.hurt(global_position, atk)
 		enemy_health = body.health
-		finisher_target = body   # ← ADD THIS
+		finisher_target = body 
 		register_combo_hit()
 
 

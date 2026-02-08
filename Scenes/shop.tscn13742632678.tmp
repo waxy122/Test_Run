@@ -20,25 +20,25 @@ func _physics_process(delta: float) -> void:
 	$CanvasLayer/Panel/Label2/Label3.text = str(Coins)
 	$CanvasLayer/Panel/VBoxContainer/kunai/own.text = str(Inv.get_count(\"kunai\"))
 	$CanvasLayer/Panel/VBoxContainer/shuriken/own2.text = str(Inv.get_count(\"shuriken\"))
-	$CanvasLayer/Panel/VBoxContainer/beef/own3.text = str(Inv.get_count(\"beef\"))
+	$CanvasLayer/Panel/VBoxContainer/beef/Button.text = str(Inv.get_count(\"beef\"))
 	$CanvasLayer/Panel/VBoxContainer/honey/own3.text = str(Inv.get_count(\"honey\"))
 	$CanvasLayer/Panel/VBoxContainer/noodles/own3.text = str(Inv.get_count(\"noodle\"))
-	$CanvasLayer/Panel/VBoxContainer/sword/sw/own3.text = str(Inv.get_count(\"sword_lvl\"))
+	$CanvasLayer/Panel/VBoxContainer/sword/Button/own3.text = str(Inv.get_count(\"sword_lvl\"))
 	
 	if $CanvasLayer/Panel.visible == false:
-		$CanvasLayer/Panel/VBoxContainer/kunai/k.disabled = true
-		$CanvasLayer/Panel/VBoxContainer/shuriken/s.disabled = true 
-		$CanvasLayer/Panel/VBoxContainer/beef/b.disabled = true 
-		$CanvasLayer/Panel/VBoxContainer/honey/h.disabled = true 
-		$CanvasLayer/Panel/VBoxContainer/noodles/n.disabled = true 
-		$CanvasLayer/Panel/VBoxContainer/sword/sw.disabled = true
+		$CanvasLayer/Panel/VBoxContainer/kunai/Button.disabled = true
+		$CanvasLayer/Panel/VBoxContainer/shuriken/Button.disabled = true 
+		$CanvasLayer/Panel/VBoxContainer/beef/Button.disabled = true 
+		$CanvasLayer/Panel/VBoxContainer/honey/Button.disabled = true 
+		$CanvasLayer/Panel/VBoxContainer/noodles/Button.disabled = true 
+		$CanvasLayer/Panel/VBoxContainer/sword/Button.disabled = true
 	else:
-		$CanvasLayer/Panel/VBoxContainer/kunai/k.disabled = false
-		$CanvasLayer/Panel/VBoxContainer/shuriken/s.disabled = false 
-		$CanvasLayer/Panel/VBoxContainer/beef/b.disabled = false 
-		$CanvasLayer/Panel/VBoxContainer/honey/h.disabled = false 
-		$CanvasLayer/Panel/VBoxContainer/noodles/n.disabled = false
-		$CanvasLayer/Panel/VBoxContainer/sword/sw.disabled = false
+		$CanvasLayer/Panel/VBoxContainer/kunai/Button.disabled = false
+		$CanvasLayer/Panel/VBoxContainer/shuriken/Button.disabled = false 
+		$CanvasLayer/Panel/VBoxContainer/beef/Button.disabled = false 
+		$CanvasLayer/Panel/VBoxContainer/honey/Button.disabled = false 
+		$CanvasLayer/Panel/VBoxContainer/noodles/Button.disabled = false
+		$CanvasLayer/Panel/VBoxContainer/sword/Button.disabled = false
 
 func _on_area_2d_body_entered(body: Node2D) -> void:
 	if body.is_in_group(\"Player\"):
@@ -56,38 +56,6 @@ func _on_area_2d_body_entered(body: Node2D) -> void:
 func _on_exit_pressed() -> void:
 	$CanvasLayer.visible = false
 	player.can_move = true
-
-
-func _on_k_pressed() -> void:
-	if player.kunai_ammo < 10 and Coins > 10:
-		Inv.add(\"kunai\", 1) 
-		Coins -= 10
-
-func _on_s_pressed() -> void:
-	if Inv.get_count(\"shuriken\") < 5 and Coins >= 25:
-		Inv.add(\"shuriken\", 1)
-		Coins -= 25
-
-
-func _on_b_pressed() -> void:
-	if Inv.get_count(\"beef\") < 5 and Coins >= 15:
-		Inv.add(\"beef\", 1)
-		Coins -= 15
-
-func _on_h_pressed() -> void:
-	if Inv.get_count(\"honey\") < 5 and Coins >= 10:
-		Inv.add(\"honey\", 1)
-		Coins -= 10
-
-func _on_n_pressed() -> void:
-	if Inv.get_count(\"noodle\") < 5 and Coins >= 5:
-		Inv.add(\"noodle\", 1)
-		Coins -= 5
-
-func _on_sw_pressed() -> void:
-	if Inv.get_count(\"sword_lvl\") > 3 and Coins >= 50:
-		Inv.add(\"sword_lvl\" , 1)
-		Coins -= 50
 "
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_a0mxf"]
@@ -207,10 +175,10 @@ libraries/ = SubResource("AnimationLibrary_fdj0q")
 
 [node name="Panel" type="Panel" parent="CanvasLayer" unique_id=1750013281]
 visible = false
-offset_left = 172.0
-offset_top = 80.0
-offset_right = 1133.0
-offset_bottom = 652.0
+offset_left = 4.0
+offset_top = 6.0
+offset_right = 1275.0
+offset_bottom = 714.0
 
 [node name="Label" type="Label" parent="CanvasLayer/Panel" unique_id=1245430470]
 layout_mode = 0
@@ -249,7 +217,7 @@ position = Vector2(51.000004, 64.00001)
 scale = Vector2(5, 5)
 texture = ExtResource("4_fdj0q")
 
-[node name="k" type="Button" parent="CanvasLayer/Panel/VBoxContainer/kunai" unique_id=527569302]
+[node name="Button" type="Button" parent="CanvasLayer/Panel/VBoxContainer/kunai" unique_id=527569302]
 offset_left = 15.2
 offset_top = -5.3999996
 offset_right = 50.2
@@ -259,7 +227,7 @@ text = "Buy
 "
 metadata/_edit_use_anchors_ = true
 
-[node name="Label" type="Label" parent="CanvasLayer/Panel/VBoxContainer/kunai/k" unique_id=1580051501]
+[node name="Label" type="Label" parent="CanvasLayer/Panel/VBoxContainer/kunai/Button" unique_id=1580051501]
 layout_mode = 0
 offset_left = 93.063194
 offset_right = 117.88004
@@ -279,7 +247,7 @@ position = Vector2(49.999996, 161.00002)
 scale = Vector2(5, 5)
 texture = ExtResource("5_ymrm4")
 
-[node name="s" type="Button" parent="CanvasLayer/Panel/VBoxContainer/shuriken" unique_id=1546398926]
+[node name="Button" type="Button" parent="CanvasLayer/Panel/VBoxContainer/shuriken" unique_id=1546398926]
 offset_left = 14.599999
 offset_top = -5.400001
 offset_right = 49.6
@@ -289,12 +257,12 @@ text = "Buy
 "
 metadata/_edit_use_anchors_ = true
 
-[node name="Label" type="Label" parent="CanvasLayer/Panel/VBoxContainer/shuriken/s" unique_id=44510678]
+[node name="Label" type="Label" parent="CanvasLayer/Panel/VBoxContainer/shuriken/Button" unique_id=44510678]
 layout_mode = 0
 offset_left = 93.063194
 offset_right = 117.88004
 offset_bottom = 23.0
-text = "25"
+text = "10"
 
 [node name="own2" type="Label" parent="CanvasLayer/Panel/VBoxContainer/shuriken" unique_id=1895783814]
 offset_left = 3.6000004
@@ -317,7 +285,7 @@ offset_bottom = 25.800001
 scale = Vector2(0.666148, 0.32835954)
 text = "5"
 
-[node name="b" type="Button" parent="CanvasLayer/Panel/VBoxContainer/beef" unique_id=1333115228]
+[node name="Button" type="Button" parent="CanvasLayer/Panel/VBoxContainer/beef" unique_id=1333115228]
 offset_left = 14.599999
 offset_top = -5.400001
 offset_right = 49.6
@@ -327,19 +295,19 @@ text = "Buy
 "
 metadata/_edit_use_anchors_ = true
 
-[node name="Label" type="Label" parent="CanvasLayer/Panel/VBoxContainer/beef/b" unique_id=1333218459]
+[node name="Label" type="Label" parent="CanvasLayer/Panel/VBoxContainer/beef/Button" unique_id=1333218459]
 layout_mode = 0
 offset_left = 93.063194
 offset_right = 117.88004
 offset_bottom = 23.0
-text = "15"
+text = "10"
 
 [node name="honey" type="Sprite2D" parent="CanvasLayer/Panel/VBoxContainer" unique_id=300782225]
 position = Vector2(49, 366)
 scale = Vector2(5, 5)
 texture = ExtResource("6_3ps1r")
 
-[node name="h" type="Button" parent="CanvasLayer/Panel/VBoxContainer/honey" unique_id=1912073890]
+[node name="Button" type="Button" parent="CanvasLayer/Panel/VBoxContainer/honey" unique_id=1912073890]
 offset_left = 14.599999
 offset_top = -5.400001
 offset_right = 49.6
@@ -349,7 +317,7 @@ text = "Buy
 "
 metadata/_edit_use_anchors_ = true
 
-[node name="Label" type="Label" parent="CanvasLayer/Panel/VBoxContainer/honey/h" unique_id=681111865]
+[node name="Label" type="Label" parent="CanvasLayer/Panel/VBoxContainer/honey/Button" unique_id=681111865]
 layout_mode = 0
 offset_left = 93.063194
 offset_right = 117.88004
@@ -369,7 +337,7 @@ position = Vector2(543.00006, 83)
 scale = Vector2(5, 5)
 texture = ExtResource("8_s8dlv")
 
-[node name="n" type="Button" parent="CanvasLayer/Panel/VBoxContainer/noodles" unique_id=1283070925]
+[node name="Button" type="Button" parent="CanvasLayer/Panel/VBoxContainer/noodles" unique_id=1283070925]
 offset_left = 14.599999
 offset_top = -5.400001
 offset_right = 49.6
@@ -379,12 +347,12 @@ text = "Buy
 "
 metadata/_edit_use_anchors_ = true
 
-[node name="Label" type="Label" parent="CanvasLayer/Panel/VBoxContainer/noodles/n" unique_id=982263064]
+[node name="Label" type="Label" parent="CanvasLayer/Panel/VBoxContainer/noodles/Button" unique_id=982263064]
 layout_mode = 0
 offset_left = 93.063194
 offset_right = 117.88004
 offset_bottom = 23.0
-text = "5"
+text = "10"
 
 [node name="own3" type="Label" parent="CanvasLayer/Panel/VBoxContainer/noodles" unique_id=173341484]
 offset_left = 3.7999992
@@ -399,7 +367,7 @@ position = Vector2(543, 209)
 scale = Vector2(0.2, 0.2)
 texture = ExtResource("9_tyrku")
 
-[node name="sw" type="Button" parent="CanvasLayer/Panel/VBoxContainer/sword" unique_id=1359380322]
+[node name="Button" type="Button" parent="CanvasLayer/Panel/VBoxContainer/sword" unique_id=1359380322]
 offset_left = 369.99994
 offset_top = -109.999985
 offset_right = 407.99994
@@ -410,7 +378,7 @@ text = "Upgrade
 "
 metadata/_edit_use_anchors_ = true
 
-[node name="own3" type="Label" parent="CanvasLayer/Panel/VBoxContainer/sword/sw" unique_id=313455816]
+[node name="own3" type="Label" parent="CanvasLayer/Panel/VBoxContainer/sword/Button" unique_id=313455816]
 layout_mode = 0
 offset_left = -34.526337
 offset_top = 20.639961
@@ -419,13 +387,13 @@ offset_bottom = 43.63996
 scale = Vector2(1.6427792, 1.1257919)
 text = "5"
 
-[node name="Label" type="Label" parent="CanvasLayer/Panel/VBoxContainer/sword/sw" unique_id=1201486503]
+[node name="Label" type="Label" parent="CanvasLayer/Panel/VBoxContainer/sword/Button" unique_id=1201486503]
 layout_mode = 0
 offset_left = 101.66913
 offset_top = 0.020807417
 offset_right = 126.48598
 offset_bottom = 23.020807
-text = "50"
+text = "10"
 
 [node name="Label3" type="Label" parent="CanvasLayer/Panel" unique_id=2070012982]
 layout_mode = 0
@@ -445,33 +413,18 @@ offset_bottom = 129.0
 theme_override_font_sizes/font_size = 32
 text = "Price"
 
-[node name="exit" type="Button" parent="CanvasLayer/Panel" unique_id=105173618]
-layout_mode = 0
-offset_left = 892.0
-offset_top = 2.0
-offset_right = 956.0
-offset_bottom = 65.0
+[node name="exit" type="Button" parent="CanvasLayer" unique_id=105173618]
+offset_left = 1210.0
+offset_top = 10.0
+offset_right = 1274.0
+offset_bottom = 73.0
 
-[node name="Sprite2D" type="Sprite2D" parent="CanvasLayer/Panel/exit" unique_id=2046346286]
+[node name="Sprite2D" type="Sprite2D" parent="CanvasLayer/exit" unique_id=2046346286]
 position = Vector2(31, 30)
 scale = Vector2(3.0238094, 2.8809524)
 texture = ExtResource("2_2shtd")
 region_enabled = true
 region_rect = Rect2(388.6294, 99.70341, 21.45935, 21.925858)
 
-[node name="Label" type="Label" parent="." unique_id=276812677]
-offset_left = -26.5
-offset_top = -46.0
-offset_right = 26.5
-offset_bottom = -23.0
-text = "Shop:>"
-
 [connection signal="body_entered" from="Area2D" to="." method="_on_area_2d_body_entered"]
-[connection signal="pressed" from="CanvasLayer/Panel/VBoxContainer/kunai/k" to="." method="_on_k_pressed"]
-[connection signal="pressed" from="CanvasLayer/Panel/VBoxContainer/kunai/k" to="." method="_on_button_pressed"]
-[connection signal="pressed" from="CanvasLayer/Panel/VBoxContainer/shuriken/s" to="." method="_on_s_pressed"]
-[connection signal="pressed" from="CanvasLayer/Panel/VBoxContainer/beef/b" to="." method="_on_b_pressed"]
-[connection signal="pressed" from="CanvasLayer/Panel/VBoxContainer/honey/h" to="." method="_on_h_pressed"]
-[connection signal="pressed" from="CanvasLayer/Panel/VBoxContainer/noodles/n" to="." method="_on_n_pressed"]
-[connection signal="pressed" from="CanvasLayer/Panel/VBoxContainer/sword/sw" to="." method="_on_sw_pressed"]
-[connection signal="pressed" from="CanvasLayer/Panel/exit" to="." method="_on_exit_pressed"]
+[connection signal="pressed" from="CanvasLayer/exit" to="." method="_on_exit_pressed"]

@@ -4,14 +4,15 @@ signal inventory_changed
 
 var items := {
 	"kunai": 10,
-	"shuriken": 5,
-	"coins": 0,
+	"shuriken": 0,
+	"coins": 100,
 	"silver_key": 0,
 	"gold_key": 0,
 	"letter": 0,
 	"beef": 0, 
 	"honey": 0,
-	"noodle": 0
+	"noodle": 0,
+	"sword_lvl" : 1
 }
 
 func has(item: String) -> bool:
