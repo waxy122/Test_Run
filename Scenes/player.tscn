@@ -496,7 +496,7 @@ shape = SubResource("CircleShape2D_6t5aa")
 [node name="regen_timer" type="Timer" parent="CanvasLayer" unique_id=106894772]
 
 [node name="kunai" type="Sprite2D" parent="CanvasLayer" unique_id=1644125510]
-position = Vector2(32, 127)
+position = Vector2(32, 178)
 scale = Vector2(4, 4)
 texture = ExtResource("6_x3wgy")
 
@@ -507,6 +507,7 @@ offset_right = 76.0
 offset_bottom = 38.97931
 scale = Vector2(0.12344813, 0.16782424)
 text = "1"
+metadata/_edit_use_anchors_ = true
 
 [node name="shuriken" type="Sprite2D" parent="CanvasLayer" unique_id=1154181493]
 visible = false
@@ -515,10 +516,10 @@ scale = Vector2(4, 4)
 texture = ExtResource("7_3smsa")
 
 [node name="shuriken_amm" type="LineEdit" parent="CanvasLayer/shuriken" unique_id=953342145]
-offset_left = 6.5
-offset_top = -15.0
-offset_right = 75.0
-offset_bottom = 18.97931
+offset_left = 7.75
+offset_top = 6.25
+offset_right = 76.25
+offset_bottom = 40.22931
 scale = Vector2(0.12344813, 0.16782424)
 text = "1"
 
@@ -531,6 +532,17 @@ offset_bottom = 59.0
 max_value = 10.0
 step = 1.0
 value = 10.0
+rounded = true
+show_percentage = false
+
+[node name="stamina bar" type="ProgressBar" parent="CanvasLayer" unique_id=1996525152]
+modulate = Color(0.9255456, 0.7846405, 0, 1)
+offset_left = 2.0
+offset_top = 61.0
+offset_right = 362.0
+offset_bottom = 89.0
+step = 1.0
+value = 100.0
 rounded = true
 show_percentage = false
 

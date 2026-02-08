@@ -37,6 +37,8 @@ var is_hit := false
 @onready var kunai_amm: LineEdit = $CanvasLayer/kunai/kunai_amm
 @onready var shuriken_amm: LineEdit = $CanvasLayer/shuriken/shuriken_amm
 @onready var health_bar: ProgressBar = $CanvasLayer/health_bar
+@onready var stamina_bar: ProgressBar = $"CanvasLayer/stamina bar"
+
 
 
 func _ready() -> void:
@@ -46,6 +48,7 @@ func _ready() -> void:
 
 func _physics_process(delta: float) -> void:
 	health_bar.value = float(health) / 10 * health_bar.max_value
+	stamina_bar.value = float(stamina)
 	if is_dead:
 		velocity = Vector2.ZERO
 		return
@@ -68,7 +71,7 @@ func _physics_process(delta: float) -> void:
 
 	if Input.is_action_pressed("Sprint") and stamina > 0:
 		SPEED = 500
-		stamina -= 25 * delta
+		stamina -= float(25) * delta
 		$CanvasLayer/regen_timer.stop()
 	else:
 		SPEED = 300

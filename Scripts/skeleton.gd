@@ -8,12 +8,16 @@ var y := 1
 
 var detect := false
 var target: Node2D
+var player_lastpos: Vector2
 
 # Knockback
 var knockback_velocity := Vector2.ZERO
 var knockback_strength := 250.0
 var knockback_friction := 1200.0
 
+# States
+enum State { IDLE, CHASE, SEARCH, DIE }
+var state: State = State.IDLE
 var is_dead := false
 
 @onready var up: RayCast2D = $Up
@@ -34,6 +38,7 @@ func _ready() -> void:
 
 func _physics_process(delta: float) -> void:
 	health_bar.value = health
+
 	if is_dead:
 		velocity = Vector2.ZERO
 		return
@@ -49,14 +54,21 @@ func _physics_process(delta: float) -> void:
 		return
 
 	if detect and target:
+		state = State.CHASE
 		chase()
+	elif state == State.SEARCH:
+		move_to_lastpos()
 	else:
+		state = State.IDLE
 		wander()
 
 	update_animation()
 	move_and_slide()
 
 
+# =====================
+# MOVEMENT
+# =====================
 func wander():
 	var dir := Vector2(x, y).normalized()
 
@@ -77,8 +89,18 @@ func chase():
 	velocity = dir * speed * 1.2
 
 
+func move_to_lastpos():
+	var dir := player_lastpos - global_position
+
+	if dir.length() < 8:
+		state = State.IDLE
+		return
+
+	velocity = dir.normalized() * speed * 1.2
+
+
 # =====================
-# ANIMATION (ONLY THING THAT CHANGED)
+# ANIMATION
 # =====================
 func update_animation():
 	if velocity == Vector2.ZERO:
@@ -114,6 +136,9 @@ func play_run(dir: Vector2):
 		anim.play("run_down")
 
 
+# =====================
+# RANDOM WANDER
+# =====================
 func _on_timer_timeout() -> void:
 	timer.wait_time = randi_range(1, 4)
 	x = [-1, 1].pick_random()
@@ -121,6 +146,9 @@ func _on_timer_timeout() -> void:
 	timer.start()
 
 
+# =====================
+# DETECTION
+# =====================
 func _on_area_2d_body_entered(body: Node2D) -> void:
 	if body.is_in_group("Player"):
 		detect = true
@@ -129,13 +157,19 @@ func _on_area_2d_body_entered(body: Node2D) -> void:
 
 func _on_area_2d_body_exited(body: Node2D) -> void:
 	if body.is_in_group("Player"):
-		detect = false
+		player_lastpos = body.global_position
 		target = null
+		detect = false
+		state = State.SEARCH
 
 
+# =====================
+# COMBAT
+# =====================
 func _on_hitbox_body_entered(body: Node2D) -> void:
 	if body.is_in_group("Player"):
 		body.hit(global_position, 2)
+
 
 func hurt(attacker_pos: Vector2, attk: int):
 	if is_dead:
@@ -144,18 +178,19 @@ func hurt(attacker_pos: Vector2, attk: int):
 	var dir := (global_position - attacker_pos).normalized()
 	knockback_velocity = dir * knockback_strength
 
-	# flash effect (invulnerability feedback)
-	$AnimatedSprite2D.modulate = Color(1, 0.4, 0.4)
+	anim.modulate = Color(1, 0.4, 0.4)
 	await get_tree().create_timer(0.08).timeout
-	$AnimatedSprite2D.modulate = Color(1, 1, 1)
-	
+	anim.modulate = Color(1, 1, 1)
+
 	health -= attk
 	if health <= 0:
 		die()
 
+
 func die():
 	is_dead = true
 	velocity = Vector2.ZERO
+	state = State.DIE
 	anim.play("die")
 	await anim.animation_finished
 	queue_free()
