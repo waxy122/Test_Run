@@ -14,6 +14,7 @@ var shuriken_ammo: int = Inv.get_count("shuriken")
 var max_stamina: int = 100
 var stamina: int = 100
 
+
 var last_direction: Vector2 = Vector2.RIGHT
 var is_attacking: bool = false
 var is_throwing: bool = false
