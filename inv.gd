@@ -9,7 +9,7 @@ var items := {
 	"silver_key": 0,
 	"gold_key": 0,
 	"letter": 0,
-	"beef": 0,
+	"beef": 0, 
 	"honey": 0,
 	"noodle": 0
 }
