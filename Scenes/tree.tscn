@@ -1,0 +1,20 @@
+[gd_scene format=3 uid="uid://ce4oreolweowr"]
+
+[ext_resource type="Texture2D" uid="uid://b5008wfwbyfsg" path="res://Assets/Tilemaps/TilesetNature.png" id="1_0vwjc"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_0vwjc"]
+size = Vector2(20, 9)
+
+[node name="tree" type="StaticBody2D" unique_id=842474416]
+z_index = 1
+y_sort_enabled = true
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=1951683892]
+texture = ExtResource("1_0vwjc")
+region_enabled = true
+region_rect = Rect2(255.85213, -0.25822735, 32.71312, 31.987286)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=871346761]
+visible = false
+position = Vector2(0, 11.5)
+shape = SubResource("RectangleShape2D_0vwjc")

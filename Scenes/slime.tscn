@@ -172,7 +172,6 @@ radius = 84.642296
 radius = 14.0057125
 
 [node name="Slime" type="CharacterBody2D" unique_id=1412222983 groups=["Enemy"]]
-scale = Vector2(2, 2)
 script = ExtResource("1_swwnm")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=687889871 groups=["Enemy"]]

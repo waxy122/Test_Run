@@ -147,7 +147,6 @@ _data = {
 }
 
 [node name="shop" type="StaticBody2D" unique_id=147366885]
-scale = Vector2(2, 2)
 script = SubResource("GDScript_a0mxf")
 
 [node name="Sprite2D" type="Sprite2D" parent="." unique_id=138920845]
@@ -467,8 +466,8 @@ offset_bottom = -23.0
 text = "Shop:>"
 
 [connection signal="body_entered" from="Area2D" to="." method="_on_area_2d_body_entered"]
-[connection signal="pressed" from="CanvasLayer/Panel/VBoxContainer/kunai/k" to="." method="_on_k_pressed"]
 [connection signal="pressed" from="CanvasLayer/Panel/VBoxContainer/kunai/k" to="." method="_on_button_pressed"]
+[connection signal="pressed" from="CanvasLayer/Panel/VBoxContainer/kunai/k" to="." method="_on_k_pressed"]
 [connection signal="pressed" from="CanvasLayer/Panel/VBoxContainer/shuriken/s" to="." method="_on_s_pressed"]
 [connection signal="pressed" from="CanvasLayer/Panel/VBoxContainer/beef/b" to="." method="_on_b_pressed"]
 [connection signal="pressed" from="CanvasLayer/Panel/VBoxContainer/honey/h" to="." method="_on_h_pressed"]

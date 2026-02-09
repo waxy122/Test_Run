@@ -1,7 +1,7 @@
 extends CharacterBody2D
 
 @export var can_move: bool = true
-@export var SPEED := 200
+@export var SPEED := 100
 @export var health := 10
 @export var atk: int = 1 * Inv.get_count("sword_lvl")
 var is_dead := false
@@ -89,11 +89,11 @@ func _physics_process(delta: float) -> void:
 		attack()
 
 	if Input.is_action_pressed("Sprint") and stamina > 0 and velocity != Vector2.ZERO:
-		SPEED = 400
+		SPEED = 200
 		stamina -= float(25) * delta
 		$CanvasLayer/regen_timer.stop()
 	else:
-		SPEED = 200
+		SPEED = 100
 		if stamina < max_stamina and $CanvasLayer/regen_timer.is_stopped():
 			$CanvasLayer/regen_timer.start()
 
