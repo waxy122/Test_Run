@@ -334,7 +334,7 @@ func finisher():
 	$CanvasLayer/ColorRect.visible = false
 	
 	# teleport behind enemy
-	var offset := -200.0
+	var offset := -75.0
 	global_position = finisher_target.global_position + dir * offset
 
 	# face the enemy

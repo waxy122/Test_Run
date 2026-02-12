@@ -19,8 +19,8 @@ config/icon="res://icon.svg"
 
 GlobalConfig="*uid://5w28ropjxgg2"
 Inv="*uid://dgkylf2mp0vxe"
-Dialogic="*uid://ds2q0uclmolvu"
 Signal_Debugger="*uid://dfvm7h6wrqydq"
+Dialogic="*uid://ds2q0uclmolvu"
 
 [dialogic]
 

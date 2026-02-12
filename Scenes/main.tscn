@@ -16,6 +16,8 @@
 [ext_resource type="Texture2D" uid="uid://qm1d8fdto7us" path="res://Assets/Tilemaps/TilesetRelief.png" id="10_pdsj5"]
 [ext_resource type="Texture2D" uid="uid://qt0bd0te8rp" path="res://Assets/Tilemaps/TilesetDesert.png" id="11_ee4r6"]
 [ext_resource type="PackedScene" uid="uid://ce4oreolweowr" path="res://Scenes/tree.tscn" id="11_wsu2k"]
+[ext_resource type="PackedScene" uid="uid://wsee2urpo12e" path="res://Scenes/skeleton.tscn" id="17_b3802"]
+[ext_resource type="PackedScene" uid="uid://cyijnym71f15p" path="res://Scenes/slime.tscn" id="18_fevyy"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_jjvhh"]
 texture = ExtResource("3_8gbba")
@@ -2172,3 +2174,15 @@ layer_2/tile_data = PackedInt32Array(1769496, 0, 0, 1835032, 0, 1, 1900568, 0, 1
 z_index = 0
 y_sort_enabled = false
 position = Vector2(495, 269)
+
+[node name="Skeleton" parent="." unique_id=1412222983 instance=ExtResource("17_b3802")]
+position = Vector2(870, -313)
+
+[node name="Skeleton2" parent="." unique_id=2099694786 instance=ExtResource("17_b3802")]
+position = Vector2(951, -313)
+
+[node name="Slime" parent="." unique_id=604361165 instance=ExtResource("18_fevyy")]
+position = Vector2(826, -290)
+
+[node name="Slime2" parent="." unique_id=1812924229 instance=ExtResource("18_fevyy")]
+position = Vector2(865, -292)

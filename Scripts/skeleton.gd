@@ -1,6 +1,6 @@
 extends CharacterBody2D
 
-var speed := 100.0
+var speed := 50.0
 var health := 10
 
 var x := 1
@@ -193,4 +193,5 @@ func die():
 	state = State.DIE
 	anim.play("die")
 	await anim.animation_finished
+	Inv.add("coins" , randi_range(10, 30))
 	queue_free()
